@@ -75,13 +75,27 @@ Visualiser l'espace disque utilisé
 Construire une image<br>
 `docker image build CHEMIN`<br>
 ex : `docker image build .` va chercher le Dockerfile dnas le dossier courrant pour construire l'image.<br>
-Pour donner un nom à la construction, ajouter l'option tag<br>
-`docker build -t lenom:latest .`<br>
+Pour donner un nom au moment de la construction, ajouter l'option tag :<br>
+`docker build -t myimage:latest .`<br>
+Pour ne pas utiliser de cache :<br>
+`docker build --no-cache -t myimage:latest . `<br>
 
-
+Seules les instructions `RUN`, `COPY` et `ADD` créent des nouvelles couches et augmentent la taille d'une image. Toutes les autres instructions ne font que créer des images intermédiaires temporaires et n'augmentent donc pas la taille de l'image finale.<br>
+Il est obligatoire de mettre `apt-get update` et `apt-get install` dans la même instruction `RUN`.
 
 __RUN__<br>
-il faut utiliser le package manager de l'image utilisée pour installer les différentes library. Sur Ubuntu par exemple, on utilise `apt` (ex : `apt-get update && apt-get -y dist-upgrade`), sur alpine `apk` (ex : `apk add --update nodejs`), etc.
+Il existe deux syntaxes pour l'instruction RUN, la forme `shell` et la forme `exec`.<br>
+Forme exec : `RUN ["executable", "param1", "param2"]` par exemple `RUN ["/bin/bash", "-c", "echo Bonjour !"]` (guillemets doubles obligatoires)
+Forme shell : `RUN echo "Bonjour !"` (revient en fait à faire `/bin/sh -c`)
 
-__COPY__<br>
-`COPY ./fromhost ./tocontainer 
+Pour les installations, il faut utiliser le package manager de l'image utilisée pour installer les différentes library. Sur Ubuntu par exemple, on utilise `apt` (ex : `apt-get update && apt-get -y dist-upgrade`), sur alpine `apk` (ex : `apk add --update nodejs`), etc.
+
+__COPY__ et __ADD__<br>
+`COPY ./fromhost ./tocontainer` <br>
+`ADD source ./destination` <br>
+la source peut être une URL ou un dossier compressé<br>
+
+__WORKDIR__<br>
+pour se positioner dans le container
+`WORKDIR /dossier`
+
