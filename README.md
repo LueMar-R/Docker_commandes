@@ -23,13 +23,13 @@ Mettre en pause et reprendre les processus<br>
 
 Exécuter des commandes dans des conteneurs en cours d'exécution<br>
 `docker container exec`<br>exemples :<br>
-```
+```bash
 docker run -d --name redis redis
 docker exec -it redis redis-cli
 set cle 42 #commande redis qui fonctionne
 get cle
 ```
-```docker
+```shell
 docker container exec <container> mkdir /app 
 docker container exec <container> /app/fichier.txt #ajout d'un dossier/fichier dnas le container
 ```
