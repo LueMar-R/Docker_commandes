@@ -22,10 +22,14 @@ Mettre en pause et reprendre les processus<br>
 `docker container unpause`<br>
 
 Exécuter des commandes dans des conteneurs en cours d'exécution<br>
-`docker container exec`<br>exemple :<br>
+`docker container exec`<br>exemples :<br>
 ```
 docker run -d --name redis redis
 docker exec -it redis redis-cli
 set cle 42 #commande redis qui fonctionne
 get cle
+```
+```docker
+docker container exec <container> mkdir /app 
+docker container exec <container> /app/fichier.txt #ajout d'un dossier/fichier dnas le container
 ```
