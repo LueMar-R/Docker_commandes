@@ -78,10 +78,16 @@ ex : `docker image build .` va chercher le Dockerfile dnas le dossier courrant p
 Pour donner un nom au moment de la construction, ajouter l'option tag :<br>
 `docker build -t myimage:latest .`<br>
 Pour ne pas utiliser de cache :<br>
-`docker build --no-cache -t myimage:latest . `<br>
+`docker build --no-cache -t monimage:latest . `<br>
 
 Seules les instructions `RUN`, `COPY` et `ADD` créent des nouvelles couches et augmentent la taille d'une image. Toutes les autres instructions ne font que créer des images intermédiaires temporaires et n'augmentent donc pas la taille de l'image finale.<br>
 Il est obligatoire de mettre `apt-get update` et `apt-get install` dans la même instruction `RUN`.
+
+Inspecter une image<br>
+`docker image inspect monimage`<br>
+Cela permet d'obtenir tous les hashs des couches de l'image, et d'accéder aux variables d'environnement qui ont été définies (entre autres).
+
+
 
 __RUN__<br>
 Il existe deux syntaxes pour l'instruction RUN, la forme `shell` et la forme `exec`.<br>
@@ -110,7 +116,7 @@ WORKDIR $DIR/back
 RUN pwd
 ```
 
-__CMD__ et __ENTRYPOINT__ br>
+__CMD__ et __ENTRYPOINT__ <br>
 `CMD ["executable", "param1", "param2"]` <br>
 `CMD ["python", "/app/app.py"]/` <br>
 
@@ -123,3 +129,18 @@ ENTRYPOINT ["echo"]
 CMD ["Hello"]
 ```
 cela affichera Hello si aucune commande alternative n'est passée, ou bien le texte alternatif si on fait un `docker run test "textealternatif"`
+
+__ARG__<br>
+Permet de définir des variables qui seront utilisables par l'utilisateur lançant les conteneurs. S'utilise avec `--build-arg` au moment du build. Exemple :<br>
+`ARG env`(dans le dockerfile)<br>
+`docker build --build-arg env=prod`<br>
+
+__ENV__<br>
+Permet de définir des variables d'environnement.<br>
+`ENV CLE1="Une valeur1" CLE2="Une valeur2"`<br>
+La différence avec ARG est que les variables d'environnement sont persistées dans l'image après le build.
+
+__LABEL__<br>
+Permet d'ajouter des métadonnées à une image.
+`LABEL auteur="moi@monmail.com" version="5.0.1"`
+
