@@ -85,17 +85,41 @@ Il est obligatoire de mettre `apt-get update` et `apt-get install` dans la même
 
 __RUN__<br>
 Il existe deux syntaxes pour l'instruction RUN, la forme `shell` et la forme `exec`.<br>
-Forme exec : `RUN ["executable", "param1", "param2"]` par exemple `RUN ["/bin/bash", "-c", "echo Bonjour !"]` (guillemets doubles obligatoires)
-Forme shell : `RUN echo "Bonjour !"` (revient en fait à faire `/bin/sh -c`)
+Forme exec : `RUN ["executable", "param1", "param2"]` par exemple `RUN ["/bin/bash", "-c", "echo Bonjour !"]` (guillemets doubles obligatoires)<br>
+Forme shell : `RUN echo "Bonjour !"` (revient en fait à faire `/bin/sh -c`)<br>
 
-Pour les installations, il faut utiliser le package manager de l'image utilisée pour installer les différentes library. Sur Ubuntu par exemple, on utilise `apt` (ex : `apt-get update && apt-get -y dist-upgrade`), sur alpine `apk` (ex : `apk add --update nodejs`), etc.
+Pour les installations, il faut utiliser le package manager de l'image utilisée pour installer les différentes library. <br>Sur Ubuntu par exemple, on utilise `apt` (ex : `apt-get update && apt-get -y dist-upgrade`), sur alpine `apk` (ex : `apk add --update nodejs`), etc.
 
 __COPY__ et __ADD__<br>
-`COPY ./fromhost ./tocontainer` <br>
-`ADD source ./destination` <br>
-la source peut être une URL ou un dossier compressé<br>
+`COPY ./source.txt ./destination/` <br>
+`ADD source.txt ./destination/` <br>
+Pour ADD (contrairement à COPY) la source peut être une URL ou un dossier compressé (qui sera automatiquement décompressé).<br>
+Pour que Docker considère que la destination est un dossier il faut obligatoirement finir par `/`.
+
+Patterns :<br>
+`ADD package* /app/` copiera tous les fichiers commençant par package dans le dossier /app/ du conteneur.<br>
 
 __WORKDIR__<br>
-pour se positioner dans le container
+pour se positioner dans le container, modifier le répertoire de travail pour toutes les instructions qui suivront
 `WORKDIR /dossier`
 
+Possibilité d'utiliser des variables d'environnement :
+```shell
+ENV DIR=/app
+WORKDIR $DIR/back
+RUN pwd
+```
+
+__CMD__ et __ENTRYPOINT__ br>
+`CMD ["executable", "param1", "param2"]` <br>
+`CMD ["python", "/app/app.py"]/` <br>
+
+`ENTRYPOINT ["python", "/app/app.py"]` (forme exec, la plus courante)<br>
+`ENTRYPOINT python "/app/app.js` (forme shell)<br>
+ENTRYPOINT fait la même chopse que CMD, mais verrouille les instruction d'exécution.<br>
+On peut éventuellemnet combiner les deux : <br>
+```
+ENTRYPOINT ["echo"]
+CMD ["Hello"]
+```
+cela affichera Hello si aucune commande alternative n'est passée, ou bien le texte alternatif si on fait un `docker run test "textealternatif"`
