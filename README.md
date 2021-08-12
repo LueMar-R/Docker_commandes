@@ -188,7 +188,9 @@ app.js
 ```js
 const express = require('express');
 const app = express();
-app.get('*', (req, res) => res.status(200).json('Hello World!'));
+app.get('*', (req, res) => {
+    res.status(200).json('Hello le World!');
+})
 app.listen(80);
 ```
 package.json
@@ -260,13 +262,35 @@ Effectuer la sauvegarde du contenu d'un volume (Backup)<br>
 `docker container run --rm --volumes-from conteneur1 --mount type=bind,src="$(pwd)",target=/backup alpine tar -cf /backup/backup.tar /data` (l'option --rm supprime le conteneur une fois que celui-ci est stoppé)<br>
 Restaurer cette sauvegarde à l'intérieur d'un nouveau volume<br>
 `docker volume create restore` on crée le volume "restore"<br>
-`docker run --mount type=volume,source=restore,target=/data --mount type=bind,source="$(pwd)",target=/backup -it alpine tar -xf /backup/mydata.tar.gz -C /data` -C permet de positionner le fichier <br>
+`docker run --mount type=volume,source=restore,target=/data --mount type=bind,source="$(pwd)",target=/backup -it alpine tar -xf /backup/mydata.tar.gz -C /data` (-C permet de positionner le fichier) <br>
 
-<br>
-``<br>
-<br>
-``<br>
+Persister une base de données avec un volume<br>
+exemple avec mongodb :<br>
+`docker container run -d --name mongodb --mount source=mydb,target=/data/db mongo`<br>
+Comme le volume mydb n'existe pas, il sera automatiquement créé par Docker. Il faut absolument le monter dans /data/db et pas autre part car c'est ce chemin qui est utilisé par le démon mongod.<br>
+A noter qu'il est très simpled'utiliser mongo avec Compass et Docker.<br>
+`docker container run -d --name mongodb --mount source=mydb,target=/data/db -p 27018:27017 mongo`
+ensuite on peut entrer dnas compass : `mongodb://localhost:27018`
 
+## Réseaux
+
+Drivers :<br>
+Le __bridge__ est le driver par défaut pour les réseaux Docker. Pour communiquer avec un container sur le réseau bridge par défaut, il faut nécessairement son adresse IP.<br>
+Le __host__ est le driver permettant de supprimer l'isolation réseau d'un ou plusieurs conteneurs avec l'hôte (comme si les conteneurs tournaient directement sur l'hôte - uniquement pour le réseau, Par pour l'isolation des processus, fichiers...).<br>
+L'__overlay__ est le driver permettant de connecter plusieurs démons Docker (utilisé avec swarm). Pour faire communiquer des conteneurs qui sont situés sur des hôtes différents il faut utiliser un réseau overlay.
+
+Inspecter les réseaux<br>
+`docker network inspect bridge`<br>
+
+
+### Bridge
+On peut faire communiquer des containers entre eux par leur nom (et non leur IP, plus efficace dnas la mesure où l'on ne connaît pas à l'avance les IP qui sont attribuées), en les nommant à la création et en les dirigeant sur un réseau particulier avec l'option --network. 
+```shell
+docker network create mynet
+docker run --network mynet --name server1 -d alpine ping google.fr # ce container est en train de pinger google
+docker run --network mynet --name server2 -it alpine sh
+/ # ping server1 # on peut pinger le container server1 depuis le container serveur2 : ils communiquent
+```
 <br>
 ``<br>
 <br>
