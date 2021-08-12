@@ -26,6 +26,11 @@ Mettre en pause et reprendre les processus<br>
 Exécuter des commandes dans des conteneurs en cours d'exécution<br>
 `docker container exec`<br>exemples :<br>
 ```shell
+docker run -d --name appnode -p 80:80 mynode
+docker exec -it appnode sh
+ls # on est à l'intérieur du container
+```
+```shell
 docker run -d --name redis redis
 docker exec -it redis redis-cli
 set cle 42 #commande redis qui fonctionne
@@ -35,6 +40,7 @@ get cle
 docker container exec conteneur1 mkdir /app 
 docker container exec conteneur1 /app/fichier.txt #ajout d'un dossier/fichier dnas le container
 ```
+
 Attacher un terminal (STDIN, STDOUT et STDERR)<br>
 `docker start -ai CONTENEUR` (-a ou --attach pour STDOUT et STDERR, -i pour --interactive pour attacher également l'entére standard STDIN)<br>
 cela revient à faire :<br>
@@ -144,6 +150,12 @@ __LABEL__<br>
 Permet d'ajouter des métadonnées à une image.
 `LABEL auteur="moi@monmail.com" version="5.0.1"`
 
+__EXPOSE__<br> 
+Permet d'informer Docker qu'un conteneur écoute sur les ports spécifiés lors de son exécution. L'instruction ne publie pas le port spécifié. Il faut toujours passer l'option `-p`.
+<br>
+`EXPOSE 80`<br> écoute en tcp (par défaut). pour préciser udp il faut faire
+`EXPOSE 80/udp`<br>
+
 ## Partager une image 
 
 ### Sur Docker Hub
@@ -172,11 +184,39 @@ Charger une image au format .tar<br>
 ## Exemples 
 
 ### Serveur node
-
+app.js
+```js
+const express = require('express');
+const app = express();
+app.get('*', (req, res) => res.status(200).json('Hello World!'));
+app.listen(80);
+```
+package.json
+```json
+{
+    "dependencies": {
+        "nodemon" : "^2.0.6",
+        "express" : "^4.17.1"
+    }
+}
+```
 Dockerfile
 ```Dockerfile
-LABEL auteur="moi@monmail.com" version="5.0.1"
+FROM node:alpine
+WORKDIR /app
+COPY ./package.json . 
+RUN npm install
+COPY . .
+ENV PATH=$PATH:/app/node_modules/.bin 
+CMD [ "nodemon", "/app/app.js" ]
 ```
+- on ajoute node_modules (où se trouve npm) au path pour que la commande 'nodemon' puisse s'exécuter
+- on copie package.json avant le npm install, mais on copie le reste des fichiers *après* pour éviter de refaire le npm install à chaque modificaton des fichiers (optimisation)
+
+Pour lancer l'application :<br>
+`docker build -t myapp .`<br>
+`docker run -d --name appnode -p 80:80 myapp`<br>
+(affiche "hello world sur localhost:80)
 
 <br>
 ``<br>
