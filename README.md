@@ -222,7 +222,7 @@ Pour lancer l'application :<br>
 ## Volumes, Bind-Mount, TMPFS (Persistance)
 Par défaut, les fichiers d'un conteneur sont écrits dans une couche avec les droits d'écritures, mais cette couche est supprimée si le conteneur n'existe plus.
 
-Les différentes solutions : [https://docs.docker.com/storage/](Manage data in Docker (official))<br>
+Les différentes solutions : [Manage data in Docker (official)](https://docs.docker.com/storage/)<br>
 En résumé:<br>
 
 Bind mount : il s'agit de fichiers et de dossiers n'importe où sur le système de fichiers de l'hôte. N'importe quel processus peut les modifier, y compris en dehors de Docker. Il faut préciser le chemin absolu du fichier ou du dossier à monter. Il peut être n'importe où sur l'hôte. Si le fichier ou le dossier n'existe pas sur l'hôte, il sera créé par Docker à l'emplacement indiqué.<br>
@@ -233,10 +233,11 @@ TMPFS : il s'agit d'un stockage temporaire en mémoire vive (RAM). Ils permetten
 
 <br>
 
-
-``<br>
-<br>
-``<br>
+__Bind-mount__
+`docker run --mount type=bind,source=<fromhost>,target=<tocontainer> monimage`exemple :<br> 
+`docker run --mount type=bind,source="$(pwd)"/data,target=/data alpine` ou en mode interactif :<br>
+`docker container run -it --name alpine1 --mount type=bind,source="$(pwd)"/data,target=/data alpine sh`<br>
+Tous les fichiers créés ou supprimés ensuite dnas le dossier data sur l'hôte le seront également dnas le dossier data du container, et réciproquement. La suppression du container n'entraîne pas la suppression du dossier data et de son contenu sur l'hôte.
 
 
 <br>
