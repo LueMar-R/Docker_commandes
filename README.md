@@ -28,18 +28,16 @@ Exécuter des commandes dans des conteneurs en cours d'exécution<br>
 ```shell
 docker run -d --name appnode -p 80:80 mynode
 docker exec -it appnode sh
-ls # on est à l'intérieur du container
+/ ls #on est à l'intérieur du container
 ```
 ```shell
 docker run -d --name redis redis
 docker exec -it redis redis-cli
-set cle 42 #commande redis qui fonctionne
-get cle
+/ set cle 42 #commande redis qui fonctionne
+/ get cle
 ```
-```shell
-docker container exec conteneur1 mkdir /app 
-docker container exec conteneur1 /app/fichier.txt #ajout d'un dossier/fichier dnas le container
-```
+`docker container exec conteneur1 mkdir /app `
+`docker container exec conteneur1 /app/fichier.txt #ajout d'un dossier/fichier dnas le container`
 
 Attacher un terminal (STDIN, STDOUT et STDERR)<br>
 `docker start -ai CONTENEUR` (-a ou --attach pour STDOUT et STDERR, -i pour --interactive pour attacher également l'entére standard STDIN)<br>
@@ -284,13 +282,14 @@ Inspecter les réseaux<br>
 
 
 ### Bridge
-On peut faire communiquer des containers entre eux par leur nom (et non leur IP, plus efficace dnas la mesure où l'on ne connaît pas à l'avance les IP qui sont attribuées), en les nommant à la création et en les dirigeant sur un réseau particulier avec l'option --network. 
+On peut faire communiquer des containers entre eux par leur nom (et non leur IP, plus efficace dnas la mesure où l'on ne connaît pas à l'avance les IP qui sont attribuées), en les nommant à la création et en les dirigeant sur un réseau particulier avec l'option --network. La résolution DNS des noms des conteneurs en IP est automatique sur un réseau bridge personnalisé, contairement au réseau bridge par défaut.
 ```shell
 docker network create mynet
 docker run --network mynet --name server1 -d alpine ping google.fr # ce container est en train de pinger google
 docker run --network mynet --name server2 -it alpine sh
 / # ping server1 # on peut pinger le container server1 depuis le container serveur2 : ils communiquent
 ```
+`docker exec -it server1 ping server2` fonctionne également
 <br>
 ``<br>
 <br>
