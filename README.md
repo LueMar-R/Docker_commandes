@@ -144,3 +144,48 @@ __LABEL__<br>
 Permet d'ajouter des métadonnées à une image.
 `LABEL auteur="moi@monmail.com" version="5.0.1"`
 
+## Partager une image 
+
+### Sur Docker Hub
+
+Se connecter à / déconnecter de Docker Hub<br>
+`docker login`<br>
+`docker logout`<br>
+Publier sur Docker Hub<br>
+`docker image push monlogin/monapp:1.0`<br>
+Télécharger localement l'image<br>
+`docker image pull monlogin/monapp:1.0`<br>
+
+(voir comment [crypter ses identifiants linux](https://doc.ubuntu-fr.org/gnupg))
+
+### Hors Docker Hub
+
+Exporter une image<br>
+`docker image save [-o monimage.tar] monimage`<br>
+On aussi compresser l'archive<br>
+`docker save mon_image | gzip > mon_image.tar.gz`<br>
+
+Charger une image au format .tar<br>
+`docker image load < monimage.tar` ou<br>
+`docker image load -i mon_image.tar`
+
+<br>
+``<br>
+<br>
+``<br>
+
+
+<br>
+``<br>
+<br>
+``<br>
+
+<br>
+``<br>
+<br>
+``<br>
+
+<br>
+``<br>
+<br>
+``<br>
