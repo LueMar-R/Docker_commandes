@@ -218,7 +218,22 @@ Pour lancer l'application :<br>
 `docker run -d --name appnode -p 80:80 myapp`<br>
 (affiche "hello world sur localhost:80)
 
+
+## Volumes, Bind-Mount, TMPFS (Persistance)
+Par défaut, les fichiers d'un conteneur sont écrits dans une couche avec les droits d'écritures, mais cette couche est supprimée si le conteneur n'existe plus.
+
+Les différentes solutions : [https://docs.docker.com/storage/](Manage data in Docker (official))<br>
+En résumé:<br>
+
+Bind mount : il s'agit de fichiers et de dossiers n'importe où sur le système de fichiers de l'hôte. N'importe quel processus peut les modifier, y compris en dehors de Docker. Il faut préciser le chemin absolu du fichier ou du dossier à monter. Il peut être n'importe où sur l'hôte. Si le fichier ou le dossier n'existe pas sur l'hôte, il sera créé par Docker à l'emplacement indiqué.<br>
+
+Volume : Docker utilise le système de fichiers de la machine hôte mais gère lui même cet espace et l'utilisateur doit passer par le Docker CLI. Lorsque l'on crée un volume il est stocké dans un dossier sur l'hôte (/var/lib/docker/volumes/ pour GNU/Linux... ne jamais y toucher directement!). les volumes sont entièrement gérés par Docker et sont isolés de la machine hôte. Un volume peut être utilisé par plusieurs conteneurs.<br>
+
+TMPFS : il s'agit d'un stockage temporaire en mémoire vive (RAM). Ils permettent de stocker de manière temporaire des données d'état ou des informations sensibles.
+
 <br>
+
+
 ``<br>
 <br>
 ``<br>
