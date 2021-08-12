@@ -236,9 +236,41 @@ TMPFS : il s'agit d'un stockage temporaire en mémoire vive (RAM). Il permet de 
 __Bind-mount__<br>
 `docker run --mount type=bind,source=<fromhost>,target=<tocontainer> monimage`exemple :<br> 
 `docker run --mount type=bind,source="$(pwd)"/data,target=/data alpine` ou en mode interactif :<br>
-`docker container run -it --mount type=bind,source="$(pwd)"/data,target=/data alpine sh`<br>
+`docker run -it --mount type=bind,source="$(pwd)"/data,target=/data alpine sh`<br>
 Tous les fichiers créés ou supprimés ensuite dans le dossier data sur l'hôte le seront également dans le dossier data du container, et réciproquement. La suppression du container n'entraîne pas la suppression du dossier data et de son contenu sur l'hôte.
 
+
+__Volume__<br>
+Créer et inspecter un volume<br>
+`docker volume create mydata`<br>
+`docker volume inspect mydata`<br>
+Lancer un container avec ce volume (exemple avec une image alpine)<br>
+`docker run --mount type=volume,source=mydata,target=/data alpine`ou en mode interactif :<br>
+`docker run --mount type=volume,source=mydata,target=/data -it alpine sh`
+Supprimer un volume<br>
+`docker volume rm mydata`<br>
+`docker volume prune` pour les supprimer tous<br>
+
+Partager des volumes entre plusieurs conteneurs<br>
+`docker container run -it --rm --volumes-from conteneur1 alpine sh`<br>
+
+Effectuer la sauvegarde du contenu d'un volume (Backup)<br>
+`docker run --mount type=volume,source=mydata,target=/data --mount type=bind,source="$(pwd)",target=/backup alpine tar -czf backup/mydata.tar.gz data` <br>
+*on écrase la commande de base en la remplaçant par la commande tar. le dernier "data" fait réference au dossier "data" du container où on été partagée les données du volume mydata lors du premier --mount*<br>
+`docker container run --rm --volumes-from conteneur1 --mount type=bind,src="$(pwd)",target=/backup alpine tar -cf /backup/backup.tar /data` (l'option --rm supprime le conteneur une fois que celui-ci est stoppé)<br>
+Restaurer cette sauvegarde à l'intérieur d'un nouveau volume<br>
+`docker volume create restore` on crée le volume "restore"<br>
+`docker run --mount type=volume,source=restore,target=/data --mount type=bind,source="$(pwd)",target=/backup -it alpine tar -xf /backup/mydata.tar.gz -C /data` -C permet de positionner le fichier <br>
+
+<br>
+``<br>
+<br>
+``<br>
+
+<br>
+``<br>
+<br>
+``<br>
 
 <br>
 ``<br>
