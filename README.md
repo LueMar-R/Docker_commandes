@@ -169,6 +169,15 @@ Charger une image au format .tar<br>
 `docker image load < monimage.tar` ou<br>
 `docker image load -i mon_image.tar`
 
+## Exemples 
+
+### Serveur node
+
+Dockerfile
+```Dockerfile
+LABEL auteur="moi@monmail.com" version="5.0.1"
+```
+
 <br>
 ``<br>
 <br>
