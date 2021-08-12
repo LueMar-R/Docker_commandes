@@ -225,19 +225,19 @@ Par défaut, les fichiers d'un conteneur sont écrits dans une couche avec les d
 Les différentes solutions : [Manage data in Docker (official)](https://docs.docker.com/storage/)<br>
 En résumé:<br>
 
-Bind mount : il s'agit de fichiers et de dossiers n'importe où sur le système de fichiers de l'hôte. N'importe quel processus peut les modifier, y compris en dehors de Docker. Il faut préciser le chemin absolu du fichier ou du dossier à monter. Il peut être n'importe où sur l'hôte. Si le fichier ou le dossier n'existe pas sur l'hôte, il sera créé par Docker à l'emplacement indiqué.<br>
+Bind mount : il s'agit de fichiers et de dossiers n'importe où sur le système de fichiers de l'hôte. N'importe quel processus peut les modifier, y compris en dehors de Docker. Il faut préciser le chemin absolu du fichier ou du dossier à monter. Il peut être n'importe où sur l'hôte. Si le fichier ou le dossier n'existe pas sur l'hôte, il sera créé par Docker à l'emplacement indiqué.<br>On préfère généralement l'utilisation d'un volume à un Bind-Mount, sauf dans le cas d'un environnement de développement ou il est utile pour le live reload notamment.
 
-Volume : Docker utilise le système de fichiers de la machine hôte mais gère lui même cet espace et l'utilisateur doit passer par le Docker CLI. Lorsque l'on crée un volume il est stocké dans un dossier sur l'hôte (/var/lib/docker/volumes/ pour GNU/Linux... ne jamais y toucher directement!). les volumes sont entièrement gérés par Docker et sont isolés de la machine hôte. Un volume peut être utilisé par plusieurs conteneurs.<br>
+Volume : Docker utilise le système de fichiers de la machine hôte mais gère lui même cet espace et l'utilisateur doit passer par le Docker CLI. Lorsque l'on crée un volume il est stocké dans un dossier sur l'hôte (/var/lib/docker/volumes/ pour GNU/Linux... ne jamais y toucher directement!). les volumes sont entièrement gérés par Docker et sont isolés de la machine hôte. Un volume peut être utilisé par plusieurs conteneurs.<br> 
 
-TMPFS : il s'agit d'un stockage temporaire en mémoire vive (RAM). Ils permettent de stocker de manière temporaire des données d'état ou des informations sensibles.
+TMPFS : il s'agit d'un stockage temporaire en mémoire vive (RAM). Il permet de stocker temporairement des données d'état ou des informations sensibles.
 
 <br>
 
-__Bind-mount__
+__Bind-mount__<br>
 `docker run --mount type=bind,source=<fromhost>,target=<tocontainer> monimage`exemple :<br> 
 `docker run --mount type=bind,source="$(pwd)"/data,target=/data alpine` ou en mode interactif :<br>
-`docker container run -it --name alpine1 --mount type=bind,source="$(pwd)"/data,target=/data alpine sh`<br>
-Tous les fichiers créés ou supprimés ensuite dnas le dossier data sur l'hôte le seront également dnas le dossier data du container, et réciproquement. La suppression du container n'entraîne pas la suppression du dossier data et de son contenu sur l'hôte.
+`docker container run -it --mount type=bind,source="$(pwd)"/data,target=/data alpine sh`<br>
+Tous les fichiers créés ou supprimés ensuite dans le dossier data sur l'hôte le seront également dans le dossier data du container, et réciproquement. La suppression du container n'entraîne pas la suppression du dossier data et de son contenu sur l'hôte.
 
 
 <br>
