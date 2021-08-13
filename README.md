@@ -354,6 +354,7 @@ volumes:
     data3:                      # si data3 n'existe pas, il sera créé par docker compose...
       external: true            # ...à moins qu'on ait forcé avec external:true              
 ```
+En développement, plutôt que de faire des `docker-compose up` il est souvent pratique d'utiliser le `docker-compose build` suivi des `docker-compose run` pour les différentes images buildées.
 
 <br>
 ``<br>
