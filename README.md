@@ -310,7 +310,7 @@ myalpine:
   image: alpine
 ```
 On peut faire :<br>
-`docker-compose up`<br>
+`docker-compose up`(lancer tous les services du docker-compose)<br>
 `docker-compose run myalpine`(exécuter un service)<br>
 ou pour faire exécuter une commande par un service :<br>
 `docker-compose run myalpine ls` (remplace la commande par défaut bin/sh par ls)<br>
