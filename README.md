@@ -143,6 +143,7 @@ __ENV__<br>
 Permet de définir des variables d'environnement.<br>
 `ENV CLE1="Une valeur1" CLE2="Une valeur2"`<br>
 La différence avec ARG est que les variables d'environnement sont persistées dans l'image après le build.
+Les variables d'environnement peuvent être utilisées pour éviter de mettre des mots de passe en dur dans une image.
 
 __LABEL__<br>
 Permet d'ajouter des métadonnées à une image.
@@ -331,6 +332,11 @@ services:
       image: alpine
       command: ['ls']
     b:          # container construit à partir d'une image personnalisée
+      env_file:
+        - .env      # va ajouter toutes les variables d'environnement contenues dans le fichier spécifié
+      environment:
+        - USER      # va chercher la variable d'environnement USER d'abord sur l'hôte, 
+                    # et si introuvable dans un fichier .env (strictement)
       build:
         context: ./backend      # le dockerfile pour build l'image se trouve dans le dossier 'backend'
         dockerfile: Dockerfile
@@ -356,5 +362,43 @@ volumes:
 ```
 En développement, plutôt que de faire des `docker-compose up` il est souvent pratique d'utiliser le `docker-compose build` suivi des `docker-compose run` pour les différentes images buildées.
 
+Pour les réseaux:
+```yaml
+version: '3.8'
+services:
+  proxy:
+    image: nginx
+    networks:
+      - frontend
+  app:
+    image: nginx
+    networks:
+      - frontend
+      - backend
+  api:
+    image: node
+    networks:
+      - backend
+  db:
+    image: mongo
+    networks:
+      - backend
+networks:
+  frontend:
+    name: frontend
+  backend:
+    name: backend
+```
+```yaml
+version: '3.8'
+services:
+  api:
+    image: node
+  db:
+    image: mongo
+networks:
+  default:
+    name: monreseau
+```
 <br>
 ``<br>
