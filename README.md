@@ -299,14 +299,26 @@ Avec le réseau "host" le réseau du conteneur ne sera pas isolé de l'hôte. Le
 Par ailleurs il n'y a pas besoin de publier les ports (ce n'est même pas possible) car ce sont les ports de l'hôte.<br>
 `docker container run --rm -d --network host --name conteneur1 monimage`<br>
 
+## Docker-compose
 
-<br>
-``<br>
+exemple<br>
+fichier .yml
+```yaml
+version: "3.8"
+services:
+myalpine:
+  image: alpine
+```
+On peut faire :<br>
+`docker-compose up`<br>
+`docker-compose run myalpine`(exécuter un service)<br>
+ou pour faire exécuter une commande par un service :<br>
+`docker-compose run myalpine ls` (remplace la commande par défaut bin/sh par ls)<br>
 
-<br>
-``<br>
-<br>
-``<br>
+Stopper les conteneurs lancés avec docker-compose<br>
+`docker-compose down `<br>
+pour suuprimer également les volumes créés avec docker-compose<br>
+`docker-compose down -v`<br>
 
 <br>
 ``<br>
