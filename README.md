@@ -290,10 +290,10 @@ docker run --network mynet --name server2 -it alpine sh
 / # ping server1 # on peut pinger le container server1 depuis le container serveur2 : ils communiquent
 ```
 `docker exec -it server1 ping server2` fonctionne également
-Connecter un container à un réseau existant<br>
+
+Connecter / déconnecter un container à un réseau existant<br>
 `docker network connect network1 conteneur1`<br>
-<br>
-``<br>
+`docker network disconnect bridge conteneur1`<br> (ici déco du réseau par défaut)
 
 <br>
 ``<br>
