@@ -295,8 +295,11 @@ Connecter / déconnecter un container à un réseau existant<br>
 `docker network connect network1 conteneur1`<br>
 `docker network disconnect bridge conteneur1`<br> (ici déco du réseau par défaut)
 
-<br>
-``<br>
+Avec le réseau "host" le réseau du conteneur ne sera pas isolé de l'hôte. Le conteneur et l'hôte auront les mêmes interfaces réseaux. Le conteneur n'aura donc par exemple pas sa propre adresse IP.<br>
+Par ailleurs il n'y a pas besoin de publier les ports (ce n'est même pas possible) car ce sont les ports de l'hôte.<br>
+`docker container run --rm -d --network host --name conteneur1 monimage`<br>
+
+
 <br>
 ``<br>
 
