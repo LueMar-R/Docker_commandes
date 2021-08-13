@@ -320,7 +320,40 @@ Stopper les conteneurs lancés avec docker-compose<br>
 pour suuprimer également les volumes créés avec docker-compose<br>
 `docker-compose down -v`<br>
 
-<br>
-``<br>
+La commande 'docker-compose build' permet de construire toutes les images spécifiées dans le fichier de configuration (dans les configurations build) et de les taguer pour une future utilisation.<br>
+`docker-compose build`<br>
+
+Exemple de ce que peut contenir le docker-compose.yml :<br>
+```yaml
+version: '3.8' # toujours spécifier la version
+services:
+    a:          # container à partir d'une image, RAS
+      image: alpine
+      command: ['ls']
+    b:          # container construit à partir d'une image personnalisée
+      build:
+        context: ./backend      # le dockerfile pour build l'image se trouve dans le dossier 'backend'
+        dockerfile: Dockerfile
+        args:
+          - FOLDER=test         # passage d'arguments attendus par le dockerfile
+        labels:
+          - email=jean@gmail.com    # def de label (inspect b)
+      ports:
+        - "8081:80"             # publication des ports
+      volumes:
+        - type: bind            # un bind ne nécessite pas d'être déclaré dans la partie volumes
+          source: ./data
+          target: /app/data
+        - type: volume          # pas de source : création automatique d'un volume anomyme
+          target: /app/data2
+        - type: volume          # volume nommé : déclaration nécessaire 
+          source: data3
+          target: /app/data3
+
+volumes:
+    data3:                      # si data3 n'existe pas, il sera créé par docker compose...
+      external: true            # ...à moins qu'on ait forcé avec external:true              
+```
+
 <br>
 ``<br>
