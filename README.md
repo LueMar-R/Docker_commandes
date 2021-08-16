@@ -400,7 +400,12 @@ networks:
   default:
     name: monreseau
 ```
-<br>
+Le restart mode :<br>
+- none : celle par défaut. Les conteneurs ne sont pas redémarrés, y compris en cas d'erreur.
+- on-failure : permet de redémarrer le conteneur en cas d'erreur.
+- always : redémarre tout le temps le conteneur. S'il est stoppé manuellement, il n'est redémarré que si le démon dockerd est redémarré.
+- unless-stopped : redémarre tout le temps le conteneur. S'il est stoppé manuellement (docker container stop), il n'est jamais redémarré.
+
 ``<br>
 
 
