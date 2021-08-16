@@ -406,8 +406,34 @@ Le restart mode :<br>
 - always : redémarre tout le temps le conteneur. S'il est stoppé manuellement, il n'est redémarré que si le démon dockerd est redémarré.
 - unless-stopped : redémarre tout le temps le conteneur. S'il est stoppé manuellement (docker container stop), il n'est jamais redémarré.
 
-``<br>
 
+### Commandes docker-compose
+
+Afficher les logs de tous les services lancés par Docker Compose (particulièrement utile lorsque les services sont lancés en mode detach)<br>
+`docker-compose logs`<br>
+`docker-compose logs -f` afficher les logs en temps réel, option `-f` ou `--follow`<br>
+Afficher les services en cours d'exécution<br>
+`docker-compose top`<br>
+
+Supprimer les conteneurs stoppés<br>
+`docker-compose rm`<br>
+`docker-compose rm -f` pour forcer la confirmation (ou `--force`)<br>
+`docker-compose rm -s` pour stopper puis supprimer les containers (ou -sf) <br>
+`docker-compose rm -v` pour supprimer les volumes anonymes attachés<br>
+Ou tout d'un coup :<br>
+`docker-compose rm -svf`<br>
+
+Vérifier le mapping des ports d'un service<br>
+`docker-compose port myserver 80`<br>
+Afficher la configuration de Docker Compose<br>
+`docker-compose config`<br>
+Télécharger les dernières versions des images (utile pour mettre à jour les images `latest`<br>
+`docker-compose pull`<br>
+
+<br>
+``<br>
+<br>
+``
 
 
 ## Autres
